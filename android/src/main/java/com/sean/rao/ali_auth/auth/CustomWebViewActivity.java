@@ -1,17 +1,21 @@
-package com.sean.rao.ali_auth.auth;
+package com.aliqin.mytel.auth;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Toolbar;
 
-import com.mobile.auth.gatewayauth.Constant;
+import androidx.annotation.Nullable;
+//import androidx.appcompat.widget.Toolbar;
+
 import com.sean.rao.ali_auth.R;
-
-import org.jetbrains.annotations.Nullable;
+import com.mobile.auth.gatewayauth.Constant;
 
 /**
  * @ProjectName: NumberAuthSDK_Standard_Android
@@ -23,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
  * @Version: 1.0
  */
 public class CustomWebViewActivity extends Activity {
-   private WebView mWebView;
-   private Toolbar mToolbar;
+    private WebView mWebView;
+//    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,16 +37,38 @@ public class CustomWebViewActivity extends Activity {
         String mUrl = getIntent().getStringExtra(Constant.PROTOCOL_WEB_VIEW_URL);
         String mName = getIntent().getStringExtra(Constant.PROTOCOL_WEB_VIEW_NAME);
         setRequestedOrientation(
-            getIntent().getIntExtra(Constant.PROTOCOL_WEB_VIEW_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
+                getIntent().getIntExtra(Constant.PROTOCOL_WEB_VIEW_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
         mWebView = findViewById(R.id.webView);
-        mToolbar = findViewById(R.id.toolbar);
-
+//        mToolbar = findViewById(R.id.toolbar);
 //        mToolbar.setSubtitle(mName);
         initWebView();
         mWebView.loadUrl(mUrl);
+
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        // 获取当前的系统UI可见性标志
+        int systemUiVisibility = decorView.getSystemUiVisibility();
+
+        // 清除所有状态栏相关标志
+        systemUiVisibility &= ~(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        //设置状态栏颜色为白色
+        window.setStatusBarColor(Color.WHITE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11 (API 30) 及以上版本，使用 WindowInsetsController
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                controller.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Android 6.0 (API 23) - Android 10 (API 29)，使用 SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            // 添加 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 标志
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decorView.setSystemUiVisibility(systemUiVisibility);
+        }
+
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings wvSettings = mWebView.getSettings();
         // 是否阻止网络图像
@@ -65,6 +91,11 @@ public class CustomWebViewActivity extends Activity {
         wvSettings.setDisplayZoomControls(false);
         wvSettings.setAllowFileAccess(true);
         wvSettings.setDatabaseEnabled(true);
+        mWebView.setVerticalScrollbarOverlay(false); //不出现指定的垂直滚动条有叠加样式
+        wvSettings.setUseWideViewPort(true);//设定支持viewport
+        wvSettings.setBuiltInZoomControls(true);//设置出现缩放工具
+        wvSettings.setDisplayZoomControls(false);//设置缩放工具隐藏
+        wvSettings.setSupportZoom(true);//设定支持缩放
         //缓存相关
         // wvSettings.setAppCacheEnabled(true);
         wvSettings.setDomStorageEnabled(true);

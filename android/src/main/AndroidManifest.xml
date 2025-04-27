@@ -35,5 +35,17 @@
             android:screenOrientation="behind"
             android:theme="@style/authsdk_activity_dialog"/>
 
+        <activity
+            android:name="com.aliqin.mytel.auth.CustomWebViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|fontScale"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            tools:replace="android:theme"
+            android:screenOrientation="sensorPortrait">
+            <intent-filter>
+                <action android:name="com.aliqin.mytel.protocolWeb" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
