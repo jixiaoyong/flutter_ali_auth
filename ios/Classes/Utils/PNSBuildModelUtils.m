@@ -660,13 +660,10 @@
             [viewConfig stringValueForKey:@"protocolThreeName" defaultValue:@""],
             [viewConfig stringValueForKey:@"protocolThreeURL" defaultValue:@""]
     ];
-    NSArray *privacyColors = [[viewConfig stringValueForKey:@"appPrivacyColor" defaultValue:nil] componentsSeparatedByString:@","];
-    if (privacyColors != nil && privacyColors.count > 1) {
-        model.privacyColors = @[
-                [self getColor:privacyColors[0]],
-                [self getColor:privacyColors[1]]
-        ];
-    }
+model.privacyColors = @[
+    [self getColor:@"#999999"],
+    [self getColor:@"#1A1A1A"]
+];
 
     model.privacyAlertContentUnderline = [viewConfig boolValueForKey:@"privacyAlertProtocolNameUseUnderLine" defaultValue:NO];
     // 协议1内容颜色
