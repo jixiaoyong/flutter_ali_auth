@@ -329,6 +329,9 @@ public class OneKeyLoginPublic extends LoginParams {
         if(UtilTool.dataStatus(jsonObject, "protocolColor") && UtilTool.dataStatus(jsonObject, "protocolCustomColor")){
             config.setAppPrivacyColor(jsonObject.getIntValue("protocolColor"), jsonObject.getIntValue("protocolCustomColor"));
         }
+        config.setWebViewStatusBarColor(Color.WHITE);
+        config.setWebHiddeProgress(true);
+        config.setWebSupportedJavascript(true);
         return config;
     }
 }
