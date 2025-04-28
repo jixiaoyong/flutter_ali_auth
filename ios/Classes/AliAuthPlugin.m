@@ -23,6 +23,7 @@ bool bool_false = false;
 /// authorizationController.delegate = self; authorizationController.presentationContextProvider = self; 警告信息
 @interface AliAuthPlugin()<UIApplicationDelegate, FlutterStreamHandler, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding>
 @property (nonatomic, strong) UINavigationController *navigationController;
+@property (nonatomic, strong) NSDictionary *cachedDic;
 @end
 
 @implementation AliAuthPlugin{
@@ -124,7 +125,9 @@ bool bool_false = false;
     [self getPreLogin:call result:result];
   }
   else if ([@"quitPage" isEqualToString:call.method]) {
-    [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
+     [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:^{
+        self.cachedDic = nil;
+    }];
   }
   else if ([@"appleLogin" isEqualToString:call.method]) {
     [self handleAuthorizationAppleIDButtonPress:call result:result];
@@ -149,6 +152,7 @@ bool bool_false = false;
 #pragma mark - 初始化SDK以及相关布局
 - (void)initSdk {
   NSDictionary *dic = _callData.arguments;
+  self.cachedDic = dic; 
   // _model = [TXCustomModel mj_objectWithKeyValues: dic];
   if ([[dic stringValueForKey: @"iosSk" defaultValue: @""] isEqualToString:@""]) {
     NSDictionary *dict = @{ @"resultCode": @"500000" };
@@ -242,7 +246,7 @@ bool bool_false = false;
   };
   [self resultData: dict];
   if (!self->_isChecked && !self->_isHideToast) {
-    NSDictionary *dic = self -> _callData.arguments;
+    NSDictionary *dic = self -> _cachedDic;
     [self showToast: [dic stringValueForKey: @"toastText" defaultValue: @"请先阅读用户协议"]];
   } else {
     [[TXCommonHandler sharedInstance] cancelLoginVCAnimated: YES complete:^(void) {}];
@@ -340,7 +344,7 @@ bool bool_false = false;
               // 当未勾选隐私协议时，弹出 Toast 提示
               if ([PNSCodeLoginControllerClickLoginBtn isEqualToString:code] &&
                     !self->_isChecked) {
-                    NSDictionary *dic = self->_callData.arguments;
+                    NSDictionary *dic = self -> _cachedDic;
                     [self showToast:[dic stringValueForKey:@"toastText" defaultValue:@"请先阅读用户协议"]];
                     // 当存在isHiddenLoading时需要执行loading
               } else if ([PNSCodeLoginControllerClickLoginBtn isEqualToString:code] && !isHiddenLoading) {
@@ -357,7 +361,7 @@ bool bool_false = false;
                 }
               } else if ([PNSCodeLoginControllerClickChangeBtn isEqualToString:code]) {
                 // 通过switchCheck 参数动态控制 是否需要切换其他方式时需要勾选
-                NSDictionary *dic = self -> _callData.arguments;
+                NSDictionary *dic = self -> _cachedDic;
                 if (!self->_isChecked && !self-> _isHideToast && [dic boolValueForKey: @"switchCheck" defaultValue: YES]) {
                   [self showToast: [dic stringValueForKey: @"toastText" defaultValue: @"请先阅读用户协议"]];
                   return;
@@ -379,7 +383,7 @@ bool bool_false = false;
 
 #pragma mark -  toast
 - (void)showToast:(NSString*) message {
-  NSDictionary *dic = _callData.arguments;
+  NSDictionary *dic = self -> _cachedDic;
   UIView *view = [self findCurrentViewController].view;
   MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo: view animated:YES];
   // Set the text mode to show only text.
