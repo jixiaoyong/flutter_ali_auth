@@ -26,6 +26,13 @@
 #define TX_Alert_Default_Left_Padding 42
 #define TX_Alert_Default_Top_Padding 115
 
+static inline CGFloat AliAuthBaseWidth() { return 375.0; }
+
+// 按照375的宽度来缩放
+static inline CGFloat AliAuthScale(CGFloat currentWidth) {
+  return currentWidth / AliAuthBaseWidth();
+}
+
 /**横屏弹窗*/
 #define TX_Alert_Horizontal_Default_Left_Padding 80.0
 static UIColor *kAliAuthDarkGrayColor = nil;
@@ -2027,6 +2034,7 @@ __attribute__((constructor)) static void InitAliAuthColors() {
                            selector:(SEL)selector {
   NSLog(@"%@", dict);
   TXCustomModel *model = [TXCustomModel mj_objectWithKeyValues:dict];
+  CGFloat scale = AliAuthScale([UIScreen mainScreen].bounds.size.width);
   for (NSString *key in dict) {
     if (key && key.length > 0 && dict[key] != nil) {
       NSString *newKey = [AliAuthEnum keyPair][key] ?: key;
@@ -2298,7 +2306,7 @@ __attribute__((constructor)) static void InitAliAuthColors() {
       ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
         if (screenSize.height > screenSize.width) {
           frame.origin.y = [dict floatValueForKey:@"numFieldOffsetY"
-                                     defaultValue:130 + 20 + 15];
+                                     defaultValue:130 + 20 + 15] * scale;
         } else {
           frame.origin.y = 15 + 80 + 15;
         }
@@ -2347,16 +2355,11 @@ __attribute__((constructor)) static void InitAliAuthColors() {
   model.loginBtnFrameBlock =
       ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
         if (screenSize.height > screenSize.width) {
-          frame.size.width = [dict floatValueForKey:@"logBtnWidth"
-                                       defaultValue:300];
-          frame.size.height = [dict floatValueForKey:@"logBtnHeight"
-                                        defaultValue:40];
-          frame.origin.y = [dict floatValueForKey:@"logBtnOffsetY"
-                                     defaultValue:170 + 30 + 20];
-          frame.origin.x =
-              (superViewSize.width - [dict floatValueForKey:@"logBtnWidth"
-                                               defaultValue:300]) *
-              0.5;
+          CGFloat btnWidth = screenSize.width - 65 * scale;
+          CGFloat btnX = (screenSize.width - btnWidth) * 0.5; // 居中
+          CGFloat btnY = [dict floatValueForKey:@"logBtnOffsetY"
+                                   defaultValue:frame.origin.y];
+          return CGRectMake(btnX, btnY* scale, btnWidth, 54 * scale);
         } else {
           frame.origin.y = 110 + 30 + 20;
         }
@@ -2378,10 +2381,11 @@ __attribute__((constructor)) static void InitAliAuthColors() {
     model.changeBtnFrameBlock =
         ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
           if (screenSize.height > screenSize.width) {
-            return CGRectMake(10,
-                              [dict floatValueForKey:@"switchOffsetY"
-                                        defaultValue:frame.origin.y],
-                              superViewSize.width - 20, 30);
+            CGFloat btnWidth = screenSize.width - 65 * scale;
+            CGFloat btnX = (screenSize.width - btnWidth) * 0.5; // 居中
+            CGFloat btnY = [dict floatValueForKey:@"switchOffsetY"
+                                     defaultValue:frame.origin.y];
+            return CGRectMake(btnX, btnY* scale, btnWidth, 54 * scale);
           } else {
             return CGRectZero; // 横屏时模拟隐藏该控件
           }
@@ -2435,39 +2439,39 @@ __attribute__((constructor)) static void InitAliAuthColors() {
         }
       };
 
-      model.customViewLayoutBlock = ^(
-          CGSize screenSize,       /// 全屏参数
-          CGRect contentViewFrame, /// contentView参数
-          CGRect navFrame,         /// 导航参数
-          CGRect titleBarFrame,    /// title参数
-          CGRect logoFrame,        /// logo区域参数
-          CGRect sloganFrame,      /// slogan参数
-          CGRect numberFrame,      /// 号码处参数
-          CGRect loginFrame,       /// 登录按钮处的参数
-          CGRect changeBtnFrame,   /// 切换到其他的参数
-          CGRect privacyFrame      /// 协议区域的参数
-      ) {
-        if (backgroundView != nil) {
-          backgroundView.frame = CGRectMake(0, -CGRectGetMaxY(navFrame),
-                                            contentViewFrame.size.width,
-                                            contentViewFrame.size.height);
-        }
-        NSUInteger count = customArrayView.count;
-        NSInteger contentWidth = screenSize.width;
-        /// 弹窗模式需要重新获取他的宽度
-        if (PNSBuildModelStyleAlertPortrait == style ||
-            PNSBuildModelStyleAlertLandscape == style) {
-          contentWidth = [dict intValueForKey:@"dialogWidth" defaultValue:0];
-        }
-        for (int i = 0; i < count; i++) {
-          UIButton *itemView = (UIButton *)customArrayView[i];
-          NSInteger X =
-              (contentWidth - (width * count + space * (count - 1))) / 2 +
-              (space + width) * i; /// 两端评分
-          itemView.frame = CGRectMake(X, offsetY, itemView.frame.size.width,
-                                      itemView.frame.size.height);
-        }
-      };
+      model.customViewLayoutBlock =
+          ^(CGSize screenSize,       /// 全屏参数
+            CGRect contentViewFrame, /// contentView参数
+            CGRect navFrame,         /// 导航参数
+            CGRect titleBarFrame,    /// title参数
+            CGRect logoFrame,        /// logo区域参数
+            CGRect sloganFrame,      /// slogan参数
+            CGRect numberFrame,      /// 号码处参数
+            CGRect loginFrame,       /// 登录按钮处的参数
+            CGRect changeBtnFrame,   /// 切换到其他的参数
+            CGRect privacyFrame      /// 协议区域的参数
+          ) {
+            if (backgroundView != nil) {
+              backgroundView.frame = CGRectMake(0, -CGRectGetMaxY(navFrame),
+                                                contentViewFrame.size.width,
+                                                contentViewFrame.size.height);
+            }
+            CGFloat scale = AliAuthScale(contentViewFrame.size.width);
+            CGFloat btnSize = 48.0 * scale;
+            CGFloat padding = 32.0 * scale;
+            NSUInteger count = customArrayView.count;
+            CGFloat totalWidth = count * btnSize + (count - 1) * padding;
+            CGFloat startX = (contentViewFrame.size.width - totalWidth) * 0.5;
+            CGFloat y =
+                MAX(CGRectGetMaxY(changeBtnFrame), CGRectGetMaxY(loginFrame)) +
+                10 * scale;
+
+            for (int i = 0; i < count; i++) {
+              UIButton *itemView = (UIButton *)customArrayView[i];
+              CGFloat x = startX + i * (btnSize + padding);
+              itemView.frame = CGRectMake(x, y, btnSize, btnSize);
+            }
+          };
     }
   }
 #pragma mark 9、协议栏
