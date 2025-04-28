@@ -12,7 +12,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
-//import androidx.appcompat.widget.Toolbar;
 
 import com.sean.rao.ali_auth.R;
 import com.mobile.auth.gatewayauth.Constant;
@@ -39,8 +38,12 @@ public class CustomWebViewActivity extends Activity {
         setRequestedOrientation(
                 getIntent().getIntExtra(Constant.PROTOCOL_WEB_VIEW_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
         mWebView = findViewById(R.id.webView);
-//        mToolbar = findViewById(R.id.toolbar);
-//        mToolbar.setSubtitle(mName);
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         initWebView();
         mWebView.loadUrl(mUrl);
 
