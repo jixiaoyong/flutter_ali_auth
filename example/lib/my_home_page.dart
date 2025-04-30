@@ -55,7 +55,7 @@ class MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       androidSk =
           "kReOFbE7mWUhefnT2BAGdKCGqgtnZbcPa/vGFc6z//ytIrOxZRndH0pdIeHM465OfdpHPMFxgPATR1EnKE7aonZ5hyEP1CE4Wz0QhWEWNTg7mmeq8hstbgFtjP8boZx/mPalQZmfD5heQ9E5Rahg4tWQfsCBENlQLgR/6vqtA8F3knXFa6awGegHj3C8bSXyCVj2OKxZFAvrZ1+1bd7TD2We3HyXsSJoDBLGuSqZIZ3VkExNC8jX4fL9uP5Ul9VVNSjahTn70u+9RYdB0BrtJpw+FPytOIsapzqdfrtqkFTk3v0+BcVJnA==";
       iosSk =
-          "mjWr9sTsoXwmMx7qf0T2KQOQBpqkxeNW9I1ZNZ96ZCeBbeD9xYOUaC2mE9mcqog041VCot2sLcy9UArf+re517e5R9yowKCjf15VglZSP/HweRhOT8Cvci43zagyRqo40l85LTnZ5uJPaVauDLJB7hOTIkNPGm3fb621k6A6ZDh6aDGAKWyy0tPUPV/9RFrfeig9SURNe9Vl/Aok6SKg+SftM30uk2W8wdbV8gMVbU51Odnoapm2ZlAJYmCrdoXvROW5qc8pbQ8=";
+          "VWmo+LyWFt0Ijh8qIfz1nyUoViFgTFCXaYkFcs0d0BvoMLpCU+4+Pc7t8eW9v29k0QSnM8O0VqVJgalCikHdaXGUfvTf2+kuTbptaotoMFRrxJWFr+SkiAz8f65qY+DKb1Rm05M6PeiywebSY8iWZ6IdGs+fqElyMaRlvpyeXQ6uEQMNJK0F1G2nRVdbhP84swh5Ft6+SdAXPVQByxzEfWyBhLKXbHs2fBRfkVLVjtXzrU3E2P+OCPhzDosKtZS8UK8Cq5mlL0Q=";
 
       screenWidth =
           (PlatformDispatcher.instance.views.first.physicalSize.width /
@@ -88,7 +88,7 @@ class MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         "color": "#026ED2",
         'itemWidth': 50,
         'itemHeight': 50,
-        "viewItemName": ["支付宝", "淘宝", "微博"],
+        "viewItemName": ["", "", ""],
         "viewItemPath": [
           "assets/alipay.png",
           "assets/taobao.png",
@@ -150,7 +150,12 @@ class MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             Text(status),
             ElevatedButton(
               onPressed: () async {
-                await AliAuth.initSdk(getFullPortConfig());
+                 AliAuth.initSdk(getFullPortConfig());
+
+                Future.delayed(const Duration(seconds: 10), () {
+                  AliAuth.setProtocolChecked(true);
+                  print("设置协议勾选框状态成功");
+                });
               },
               child: const Text("开始全屏登录"),
             ),
@@ -195,6 +200,21 @@ class MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 await AliAuth.initSdk(getDialogButtomConfig());
               },
               child: const Text("开始底部弹窗登录"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await AliAuth.setProtocolChecked(true);
+                  if (kDebugMode) {
+                    print('设置复选框状态成功');
+                  }
+                } catch (e) {
+                  if (kDebugMode) {
+                    print('设置复选框状态失败: $e');
+                  }
+                }
+              },
+              child: const Text("设置复选框选中状态"),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -312,122 +332,136 @@ class MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   /// 全屏正常图片背景
   AliAuthModel getFullPortConfig({bool isDelay = false}) {
     customThirdView.top = unit * 10 + 80;
-    return AliAuthModel(
-      androidSk,
-      iosSk,
-      isDebug: true,
-      autoQuitPage: true,
-      isDelay: isDelay,
-      pageType: PageType.fullPort,
-      statusBarColor: "#026ED2",
-      bottomNavColor: "#FFFFFF",
-      lightColor: false,
-      isStatusBarHidden: false,
-      statusBarUIFlag: UIFAG.systemUiFalgFullscreen,
-      navColor: "#026ED2",
-      navText: "一键登录插件演示",
-      navTextColor: "#000000",
-      navReturnImgPath: "assets/return_btn.png",
-      navReturnImgWidth: 30,
-      navReturnImgHeight: 30,
-      navReturnHidden: false,
-      navReturnScaleType: ScaleType.center,
-      navHidden: false,
-      logoOffsetY: unit * 2,
-      logoImgPath: "assets/logo.png",
-      logoHidden: false,
-      logBtnText: "一键登录",
-      logBtnTextSize: 16,
-      logBtnTextColor: "#FFF000",
-      protocolOneName: "《通达理》",
-      protocolOneURL: "https://tunderly.com",
-      protocolTwoName: "《思预云》",
-      protocolTwoURL: "https://jokui.com",
-      protocolThreeName: "《思预云APP》",
-      protocolThreeURL:
-          "https://a.app.qq.com/o/simple.jsp?pkgname=com.civiccloud.master&fromcase=40002",
-      protocolCustomColor: "#026ED2",
-      protocolColor: "#bfbfbf",
-      protocolLayoutGravity: Gravity.centerHorizntal,
-      sloganTextColor: "#ffffff",
-      sloganOffsetY: unit * 5,
-      sloganText: "思预云欢迎您使用一键登录",
-      logBtnBackgroundPath:
-          "assets/login_btn_normal.png,assets/login_btn_unable.png,assets/login_btn_press.png",
-      loadingImgPath: "authsdk_waiting_icon",
-      logoOffsetY_B: -1,
-      numberColor: "#ffffff",
-      numberSize: 28,
-      logoScaleType: ScaleType.fitXy,
-      numFieldOffsetY: unit * 7,
-      numFieldOffsetY_B: -1,
-      numberFieldOffsetX: 0,
-      numberLayoutGravity: Gravity.centerHorizntal,
-      logBtnOffsetY: unit * 8,
-      logBtnOffsetY_B: -1,
-      logBtnHeight: 51,
-      logBtnOffsetX: 0,
-      logBtnMarginLeftAndRight: 28,
-      logBtnLayoutGravity: Gravity.centerHorizntal,
-      privacyOffsetX: -1,
-      privacyOffsetY: -1,
-      privacyOffsetY_B: 28,
-      checkBoxWidth: 18,
-      checkBoxHeight: 18,
-      checkboxHidden: false,
-      privacyState: false,
-      navTextSize: 18,
-      logoWidth: 90,
-      logoHeight: 90,
-      switchAccTextSize: 16,
-      switchAccText: "切换到其他方式",
-      switchOffsetY: unit * 9 + 20,
-      switchOffsetY_B: -1,
-      switchAccHidden: false,
-      switchAccTextColor: "#FDFDFD",
-      sloganTextSize: 16,
-      sloganHidden: false,
-      uncheckedImgPath: "assets/btn_unchecked.png",
-      checkedImgPath: "assets/btn_checked.png",
-      protocolGravity: Gravity.centerHorizntal,
-      privacyTextSize: 12,
-      privacyMargin: 28,
-      privacyBefore: "已阅读并同意",
-      privacyEnd: "",
-      vendorPrivacyPrefix: "《",
-      vendorPrivacySuffix: "》",
-      dialogWidth: -1,
-      dialogHeight: -1,
-      dialogBottom: false,
-      dialogOffsetX: 0,
-      dialogOffsetY: 0,
-      webViewStatusBarColor: "",
-      webNavColor: "#026ED2",
-      webNavTextColor: "#ffffff",
-      webNavTextSize: 20,
-      webNavReturnImgPath: "assets/return_btn.png",
-      webSupportedJavascript: true,
-      authPageActIn: "in_activity",
-      activityOut: "out_activity",
-      authPageActOut: "in_activity",
-      activityIn: "out_activity",
-      screenOrientation: -1,
-      logBtnToastHidden: false,
-      dialogAlpha: 1.0,
-      privacyOperatorIndex: 0,
-      /**
-       * "assets/background_gif.gif"
-       * "assets/background_gif1.gif"
-       * "assets/background_gif2.gif"
-       * "assets/background_image.jpeg"
-       * "assets/background_video.mp4"
-       *
-       * "https://upfile.asqql.com/2009pasdfasdfic2009s305985-ts/2018-7/20187232061776607.gif"
-       * "https://img.zcool.cn/community/01dda35912d7a3a801216a3e3675b3.gif",
-       */
-      pageBackgroundPath: "assets/background_image.jpeg",
-      customThirdView: customThirdView,
-    );
+    return AliAuthModel(androidSk, iosSk,
+        isDebug: true,
+        autoQuitPage: true,
+        isDelay: isDelay,
+        pageType: PageType.fullPort,
+        statusBarColor: "#026ED2",
+        bottomNavColor: "#FFFFFF",
+        lightColor: false,
+        isStatusBarHidden: false,
+        statusBarUIFlag: UIFAG.systemUiFalgFullscreen,
+        navColor: "#026ED2",
+        navText: "一键登录插件演示",
+        navTextColor: "#000000",
+        navReturnImgPath: "assets/return_btn.png",
+        navReturnImgWidth: 30,
+        navReturnImgHeight: 30,
+        navReturnHidden: false,
+        navReturnScaleType: ScaleType.center,
+        navHidden: false,
+        logoOffsetY: unit * 2,
+        logoImgPath: "assets/logo.png",
+        logoHidden: false,
+        logBtnText: "一键登录",
+        logBtnTextSize: 16,
+        logBtnTextColor: "#FFF000",
+        protocolOneName: "《通达理》",
+        protocolOneURL: "https://tunderly.com",
+        protocolTwoName: "《思预云》",
+        protocolTwoURL: "https://jokui.com",
+        protocolThreeName: "《思预云APP》",
+        protocolThreeURL:
+            "https://a.app.qq.com/o/simple.jsp?pkgname=com.civiccloud.master&fromcase=40002",
+        protocolCustomColor: "#026ED2",
+        protocolColor: "#bfbfbf",
+        protocolLayoutGravity: Gravity.centerHorizntal,
+        sloganTextColor: "#ffffff",
+        sloganOffsetY: unit * 5,
+        sloganText: "思预云欢迎您使用一键登录",
+        logBtnBackgroundPath:
+            "assets/login_btn_normal.png,assets/login_btn_unable.png,assets/login_btn_press.png",
+        loadingImgPath: "authsdk_waiting_icon",
+        logoOffsetY_B: -1,
+        numberColor: "#ffffff",
+        numberSize: 28,
+        logoScaleType: ScaleType.fitXy,
+        numFieldOffsetY: unit * 7,
+        numFieldOffsetY_B: -1,
+        numberFieldOffsetX: 0,
+        numberLayoutGravity: Gravity.centerHorizntal,
+        logBtnOffsetY: unit * 8,
+        logBtnOffsetY_B: -1,
+        logBtnHeight: 51,
+        logBtnOffsetX: 0,
+        logBtnMarginLeftAndRight: 28,
+        logBtnLayoutGravity: Gravity.centerHorizntal,
+        privacyOffsetX: -1,
+        privacyOffsetY: -1,
+        privacyOffsetY_B: 28,
+        checkBoxWidth: 18,
+        checkBoxHeight: 18,
+        checkboxHidden: false,
+        privacyState: false,
+        navTextSize: 18,
+        logoWidth: 90,
+        logoHeight: 90,
+        switchAccTextSize: 16,
+        switchAccText: "切换到其他方式",
+        switchOffsetY: unit * 9 + 20,
+        switchOffsetY_B: -1,
+        switchAccHidden: false,
+        switchAccTextColor: "#FDFDFD",
+        sloganTextSize: 16,
+        sloganHidden: false,
+        uncheckedImgPath: "assets/btn_unchecked.png",
+        checkedImgPath: "assets/btn_checked.png",
+        protocolGravity: Gravity.centerHorizntal,
+        privacyTextSize: 12,
+        privacyMargin: 28,
+        privacyBefore: "已阅读并同意",
+        privacyEnd: "",
+        vendorPrivacyPrefix: "《",
+        vendorPrivacySuffix: "》",
+        dialogWidth: -1,
+        dialogHeight: -1,
+        dialogBottom: false,
+        dialogOffsetX: 0,
+        dialogOffsetY: 0,
+        webViewStatusBarColor: "",
+        webNavColor: "#026ED2",
+        webNavTextColor: "#ffffff",
+        webNavTextSize: 20,
+        webNavReturnImgPath: "assets/return_btn.png",
+        webSupportedJavascript: true,
+        authPageActIn: "in_activity",
+        activityOut: "out_activity",
+        authPageActOut: "in_activity",
+        activityIn: "out_activity",
+        screenOrientation: -1,
+        logBtnToastHidden: true,
+        dialogAlpha: 1.0,
+        privacyOperatorIndex: 0,
+        /**
+         * "assets/background_gif.gif"
+         * "assets/background_gif1.gif"
+         * "assets/background_gif2.gif"
+         * "assets/background_image.jpeg"
+         * "assets/background_video.mp4"
+         *
+         * "https://upfile.asqql.com/2009pasdfasdfic2009s305985-ts/2018-7/20187232061776607.gif"
+         * "https://img.zcool.cn/community/01dda35912d7a3a801216a3e3675b3.gif",
+         */
+        pageBackgroundPath: "assets/background_image.jpeg",
+        customThirdView: customThirdView,
+        privacyAlertIsNeedShow: true,
+        privacyAlertTitleContent: "LangIntl.termsOfServiceAndPrivacyPolicy.tr",
+        privacyAlertTitleTextSize: 16,
+        privacyAlertBtnText: " LangIntl.agree.tr",
+        privacyAlertContentTextSize: 13,
+        privacyAlertBtnTextColor:'#FFFFFFFF',
+        privacyAlertContentColor: ['#FF000000', '#FF000000'].join(","),
+        privacyAlertBtnBackgroundImgPath: "assets/background_image.jpeg",
+        privacyAlertBtnWidth: 125,
+        privacyAlertBtnHeigth: 48,
+        privacyAlertBtnTextSize: 16,
+        privacyAlertWidth: 280,
+        privacyAlertHeight: 192,
+        privacyAlertCloseBtnShow: false,
+        privacyAlertContentHorizontalMargin: 20,
+        privacyAlertBefore: "beforeProceedingPleaseReadAndAgreeToOur",
+        privacyAlertContentAlignment: Gravity.centerHorizntal);
   }
 
   /// 全屏正常图片背景
@@ -534,15 +568,15 @@ class MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         dialogAlpha: 1.0,
         privacyOperatorIndex: 0,
         /**
-       * "assets/background_gif.gif"
-       * "assets/background_gif1.gif"
-       * "assets/background_gif2.gif"
-       * "assets/background_image.jpeg"
-       * "assets/background_video.mp4"
-       *
-       * "https://upfile.asqql.com/2009pasdfasdfic2009s305985-ts/2018-7/20187232061776607.gif"
-       * "https://img.zcool.cn/community/01dda35912d7a3a801216a3e3675b3.gif",
-       */
+         * "assets/background_gif.gif"
+         * "assets/background_gif1.gif"
+         * "assets/background_gif2.gif"
+         * "assets/background_image.jpeg"
+         * "assets/background_video.mp4"
+         *
+         * "https://upfile.asqql.com/2009pasdfasdfic2009s305985-ts/2018-7/20187232061776607.gif"
+         * "https://img.zcool.cn/community/01dda35912d7a3a801216a3e3675b3.gif",
+         */
         pageBackgroundPath: "assets/background_image.jpeg",
         customThirdView: customThirdView,
         privacyAlertIsNeedShow: true);

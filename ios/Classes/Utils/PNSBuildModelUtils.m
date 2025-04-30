@@ -351,7 +351,6 @@ __attribute__((constructor)) static void InitAliAuthColors() {
 
   model.privacyAlignment = [viewConfig intValueForKey:@"protocolLayoutGravity"
                                          defaultValue:1];
-  ;
   model.privacyFont =
       [UIFont fontWithName:@"PingFangSC-Regular"
                       size:[viewConfig floatValueForKey:@"privacyTextSize"

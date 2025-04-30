@@ -104,4 +104,9 @@ class AliAuth {
       required Function(dynamic) error}) async {
     await AliAuthPlatform.instance.getVerifyToken(success, error);
   }
+
+  /// 设置协议勾选框状态
+  static Future<void> setProtocolChecked(bool isChecked) async {
+    await AliAuthPlatform.instance.setProtocolChecked(isChecked);
+  }
 }

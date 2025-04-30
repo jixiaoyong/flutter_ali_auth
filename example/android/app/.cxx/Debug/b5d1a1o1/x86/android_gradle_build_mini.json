@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/shayn/dev/sdks/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/shayn/dev/sdks/android/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/shayn/dev/workspace/dev/flutter_ali_auth_fork/example/android/app/.cxx/Debug/b5d1a1o1/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/shayn/dev/sdks/android/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/shayn/dev/workspace/dev/flutter_ali_auth_fork/example/android/app/.cxx/Debug/b5d1a1o1/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

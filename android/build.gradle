@@ -84,7 +84,7 @@ android {
         //    implementation 'com.google.code.gson:gson:2.10.1'
         //    implementation 'com.alibaba:fastjson:1.2.83'
 
-        implementation fileTree(dir: 'libs', include: ['*.aar'])
+        compileOnly fileTree(dir: 'libs', include: ['*.aar'])
         implementation 'com.github.getActivity:Toaster:12.2'
 
         // uc的crash收集库，客户可自行选择是否需要集成

@@ -1,0 +1,2 @@
+/Users/shayn/dev/workspace/dev/flutter_ali_auth_fork/example/android/app/.cxx/Debug/b5d1a1o1/x86/CMakeFiles/edit_cache.dir
+/Users/shayn/dev/workspace/dev/flutter_ali_auth_fork/example/android/app/.cxx/Debug/b5d1a1o1/x86/CMakeFiles/rebuild_cache.dir

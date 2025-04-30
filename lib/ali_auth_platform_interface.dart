@@ -103,4 +103,9 @@ abstract class AliAuthPlatform extends PlatformInterface {
       Function(dynamic) success, Function(dynamic) error) async {
     throw UnimplementedError('getSdkVersion() has not been implemented.');
   }
+
+  /// 设置协议勾选框状态
+  Future<void> setProtocolChecked(bool isChecked) async {
+    throw UnimplementedError('setProtocolChecked() has not been implemented.');
+  }
 }

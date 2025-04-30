@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'my_home_page.dart';
 import 'my_home_page_web.dart';
 import 'my_router_page.dart';
+import 'ali_auth.dart';
 
 void main() {
   runApp(const MyApp());

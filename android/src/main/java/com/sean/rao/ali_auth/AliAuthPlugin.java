@@ -201,6 +201,11 @@ public class AliAuthPlugin extends FlutterActivity implements FlutterPlugin, Act
         mActivity.startActivity(FlutterActivity.withCachedEngine("default_engine_id").build(mContext));
         result.success("调用成功！");
         break;
+      case "setProtocolChecked":
+        boolean isChecked = call.argument("isChecked");
+        setProtocolChecked(isChecked);
+        result.success("设置成功");
+        break;
       default:
         result.notImplemented();
     }
@@ -335,5 +340,11 @@ public class AliAuthPlugin extends FlutterActivity implements FlutterPlugin, Act
     }
     Log.i(TAG, "移动网络连接失败");
     return false;
+  }
+
+  private void setProtocolChecked(boolean isChecked) {
+    if (oneKeyLoginPublic != null) {
+      oneKeyLoginPublic.setProtocolChecked(isChecked);
+    }
   }
 }

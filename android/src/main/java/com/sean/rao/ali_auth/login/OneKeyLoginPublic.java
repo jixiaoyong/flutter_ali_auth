@@ -243,6 +243,17 @@ public class OneKeyLoginPublic extends LoginParams {
     }
 
     /**
+     * 设置协议勾选框状态
+     * @param isChecked 是否选中
+     */
+    public void setProtocolChecked(boolean isChecked) {
+        LoginParams.isChecked = isChecked;
+        if (mAuthHelper != null) {
+            mAuthHelper.setProtocolChecked(isChecked);
+        }
+    }
+
+    /**
      * 处理参数，对参数进行处理包含color、Path
      *
      * @param parmas

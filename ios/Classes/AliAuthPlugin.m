@@ -133,7 +133,7 @@ bool bool_false = false;
     [self handleAuthorizationAppleIDButtonPress:call result:result];
   }
   else if ([@"openPage" isEqualToString:call.method]) {
-    // 1.初始化flutter控制器，并指定路由 “home”，flutter中根据该路由标识显示对应的界面
+    // 1.初始化flutter控制器，并指定路由 "home"，flutter中根据该路由标识显示对应的界面
     FlutterViewController* flutterViewController = [
       [FlutterViewController alloc] initWithProject:nil
       initialRoute:[call.arguments stringValueForKey: @"pageRoute" defaultValue: @"/"]
@@ -143,6 +143,14 @@ bool bool_false = false;
     // 2. 跳转
     flutterViewController.modalPresentationStyle = UIModalPresentationFullScreen;
     [[self findCurrentViewController] presentViewController:flutterViewController animated: YES completion:nil];
+  }
+  else if ([@"getVerifyToken" isEqualToString:call.method]) {
+    // ... existing code ...
+  }
+  else if ([@"setProtocolChecked" isEqualToString:call.method]) {
+    BOOL isChecked = [call.arguments[@"isChecked"] boolValue];
+    [self setCheckboxIsChecked:isChecked];
+    result(nil);
   }
   else {
     result(FlutterMethodNotImplemented);
@@ -675,6 +683,11 @@ bool bool_false = false;
 
 - (void) clickAllScreen:(UITapGestureRecognizer *) recognizer {
   NSLog(@"点击事件屏蔽");
+}
+
+- (void)setCheckboxIsChecked:(BOOL)isChecked {
+    _isChecked = isChecked;
+    [[TXCommonHandler sharedInstance] setCheckboxIsChecked:isChecked];
 }
 
 @end
