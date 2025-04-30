@@ -1,4 +1,5 @@
 #import "AliAuthPlugin.h"
+#include <MacTypes.h>
 #import <UIKit/UIKit.h>
 
 #import "AliAuthEnum.h"
@@ -253,10 +254,11 @@ bool bool_false = false;
     @"data" : [NSNumber numberWithInteger: index]
   };
   [self resultData: dict];
+  NSDictionary *dic = self -> _cachedDic;
+  bool autoQuitPage = [self->_cachedDic boolValueForKey: @"autoQuitPage" defaultValue: NO];
   if (!self->_isChecked && !self->_isHideToast) {
-    NSDictionary *dic = self -> _cachedDic;
     [self showToast: [dic stringValueForKey: @"toastText" defaultValue: @"请先阅读用户协议"]];
-  } else {
+  } else if (autoQuitPage) {
     [[TXCommonHandler sharedInstance] cancelLoginVCAnimated: YES complete:^(void) {}];
   }
 }

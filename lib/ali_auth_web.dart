@@ -54,4 +54,8 @@ class AliAuthPluginWeb extends AliAuthPlatform {
       Function(dynamic) success, Function(dynamic) error) async {
     aliAuthPluginWebApi.getVerifyToken(success, error);
   }
+
+  Future<void> setProtocolChecked(bool isChecked) async {
+    aliAuthPluginWebApi.setProtocolChecked(isChecked);
+  }
 }

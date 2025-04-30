@@ -17,6 +17,9 @@ class PhoneNumberServer {
 
   /// 获取token
   external getVerifyToken(Params params);
+
+  /// 设置协议勾选框状态
+  external setProtocolChecked(bool isChecked);
 }
 
 @JS()
@@ -74,5 +77,10 @@ class AliAuthPluginWebApi {
       success: allowInterop(success),
       error: allowInterop(error),
     ));
+  }
+
+  /// 设置协议勾选框状态
+  Future<void> setProtocolChecked(bool isChecked) async {
+    PhoneNumberServer().setProtocolChecked(isChecked);
   }
 }

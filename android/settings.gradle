@@ -1,1 +1,8 @@
 rootProject.name = 'ali_auth'
+include ':ali_main'
+include ':logger'
+include ':ali_auth_number_product'
+
+//project(":ali_main").projectDir = file("ali_main")
+//project(":logger").projectDir = file("logger")
+//project(":ali_auth_number_product").projectDir = file("ali_auth_number_product")

@@ -1,0 +1,8 @@
+configurations.maybeCreate("default")
+artifacts.add("default",file("auth_number_product-2.14.5-release.aar"))
+
+configurations.maybeCreate("debug")
+artifacts.add("debug",file("auth_number_product-2.14.5-release.aar"))
+
+configurations.maybeCreate("release")
+artifacts.add("release",file("auth_number_product-2.14.5-release.aar"))

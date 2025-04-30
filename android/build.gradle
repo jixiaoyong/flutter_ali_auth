@@ -4,37 +4,26 @@ version '1.3.1'
 
 buildscript {
     repositories {
-//        mavenLocal()
         google()
         mavenCentral()
-//        jcenter()
-        // JitPack 远程仓库：https://jitpack.io
-        maven { url 'https://jitpack.io' }
-//        maven { url 'https://download.flutter.io'}
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath 'com.android.tools.build:gradle:8.1.0'
     }
 }
 
-rootProject.allprojects {
+allprojects {
     repositories {
-//        mavenLocal()
         google()
         mavenCentral()
-//        jcenter()
-        // JitPack 远程仓库：https://jitpack.io
-        maven { url 'https://jitpack.io' }
-//        maven { url 'https://download.flutter.io'}
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://jitpack.io' }
 
-        // 一键登录本地依赖
         flatDir {
-//            dirs project(':ali_auth').file('libs')
             dirs 'libs'
         }
     }
@@ -48,8 +37,8 @@ android {
     compileSdkVersion 34
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     defaultConfig {
@@ -57,20 +46,18 @@ android {
     }
 
     aaptOptions {
-        noCompress "mov"  //表示不让aapt压缩的文件后缀
+        noCompress "mov"
     }
 
     buildTypes {
         release {
             debuggable false
-            // minifyEnabled true
             proguardFile file('proguard-rules.pro')
             zipAlignEnabled false
             multiDexEnabled true
         }
 
         debug {
-            // minifyEnabled false
             zipAlignEnabled false
             multiDexEnabled true
         }
@@ -78,16 +65,11 @@ android {
 
     dependencies {
         implementation "androidx.appcompat:appcompat:1.3.0"
-
-        // 兼容安卓版本的fastjson库
         implementation 'com.alibaba.fastjson2:fastjson2:2.0.51.android5'
-        //    implementation 'com.google.code.gson:gson:2.10.1'
-        //    implementation 'com.alibaba:fastjson:1.2.83'
-
-        compileOnly fileTree(dir: 'libs', include: ['*.aar'])
         implementation 'com.github.getActivity:Toaster:12.2'
 
-        // uc的crash收集库，客户可自行选择是否需要集成
-        // implementation 'com.ucweb.wpk:crashsdk:3.2.2.2'
+        implementation project(':ali_main')
+        implementation project(':ali_auth_number_product')
+        implementation project(':logger')
     }
 }

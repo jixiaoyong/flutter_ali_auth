@@ -96,6 +96,20 @@
 
 ## 注意事项
 
+### Android 引入方式
+1. 将以下模块拷贝到您的 Android 项目中：
+   - logger
+   - ali_main
+   - ali_auth_number_product
+
+2. 在项目的 `settings.gradle` 文件中添加以下内容：
+```gradle
+include ':ali_auth'
+include ':ali_auth_number_product'
+include ':ali_main'
+include ':logger'
+```
+
 关于点击事件穿透问题
 ## [参考一](https://www.jianshu.com/p/88d45977d482) [参考二](https://github.com/flutter/flutter/issues/35784)
 

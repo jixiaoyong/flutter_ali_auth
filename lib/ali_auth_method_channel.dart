@@ -94,6 +94,12 @@ class MethodChannelAliAuth extends AliAuthPlatform {
     return await methodChannel.invokeMethod('appleLogin');
   }
 
+  /// 设置协议勾选框状态
+  @override
+  Future<void> setProtocolChecked(bool isChecked) async {
+    return await methodChannel.invokeMethod('setProtocolChecked', {'isChecked': isChecked});
+  }
+
   /// 数据监听
   @override
   loginListen(
